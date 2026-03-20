@@ -1,2 +1,4 @@
 /__pycache__
 /venv
+database.db
+/__pycache__/database.cpython-312.pyc
