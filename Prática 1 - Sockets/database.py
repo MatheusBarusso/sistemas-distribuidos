@@ -9,6 +9,7 @@ class DB:
         self.conexao.commit()
         cursor.close()
 
+
     def inserir(self, codbar, nome, estoque, loc, preco):
         cursor = self.conexao.cursor()
         cursor.execute("INSERT INTO mercado(codbar, nome, estoque, loc, preco) VALUES (?, ?, ?, ?, ?)", (codbar, nome, estoque, loc, preco))
@@ -22,6 +23,7 @@ class DB:
         cursor.close()
         return id
     
+
     def buscar(self, id):
         cursor = self.conexao.cursor()
         cursor.execute("SELECT * FROM mercado WHERE codbar = ?", (id,))
@@ -29,8 +31,22 @@ class DB:
         cursor.close()
         return retorno
     
+
     def atualizar(self, id, nome, estoque, loc, preco):
         cursor = self.conexao.cursor()
         cursor.execute("UPDATE mercado SET nome = ?, estoque = ?, loc = ?, preco = ? WHERE codbar = ?", (nome, estoque, loc, preco, id))
         self.conexao.commit()
+
+        conf = cursor.rowcount > 0
         cursor.close()
+        return conf
+
+
+    def deletar(self, id):
+        cursor = self.conexao.cursor()
+        cursor.execute("DELETE FROM mercado WHERE codbar = ?", (id,))
+        self.conexao.commit()
+        cursor.execute("SELECT * FROM mercado WHERE codbar = ?", (id,))
+        retorno = cursor.fetchone()
+        cursor.close()
+        return retorno

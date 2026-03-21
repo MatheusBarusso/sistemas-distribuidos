@@ -40,19 +40,25 @@ while True:
         case 'R':
             id = int.from_bytes(dados.recv(6), 'big')
             tupla = banco.buscar(id)
-            codbar = tupla [0] #maybe remover dps --> ja usa codbar p/ consultar
-            nome = tupla[1]
-            estoque = tupla[2]
-            loc = tupla[3]
-            preco = tupla[4]
 
-            nome_b = nome.encode()
-            mensagem = len(nome_b).to_bytes(1, 'big') + nome_b
-            mensagem += estoque.to_bytes(4, 'big')
-            mensagem += loc.to_bytes(1, 'big')
-            mensagem += struct.pack('>d', preco)
+            if not tupla:
+                status = 1
+                dados.send(status.to_bytes(2, 'big', signed=True))
+                continue
+            else:
+                codbar = tupla [0] #maybe remover dps --> ja usa codbar p/ consultar
+                nome = tupla[1]
+                estoque = tupla[2]
+                loc = tupla[3]
+                preco = tupla[4]
 
-            dados.send(mensagem)
+                nome_b = nome.encode()
+                mensagem = len(nome_b).to_bytes(1, 'big') + nome_b
+                mensagem += estoque.to_bytes(4, 'big')
+                mensagem += loc.to_bytes(1, 'big')
+                mensagem += struct.pack('>d', preco)
+
+                dados.send(mensagem)
 
 
         case 'U':
@@ -61,6 +67,8 @@ while True:
 
             if not tupla:
                 status = 1
+                dados.send(status.to_bytes(2, 'big', signed=True))
+                continue
             else:
                 status = 0
                 
@@ -76,6 +84,18 @@ while True:
             conf = banco.atualizar(id, nome, estoque, loc, preco)
             status = 0 if conf else -1
 
+            mensagem = status.to_bytes(2, 'big', signed=True)
+            dados.send(mensagem)
+
+        case 'D':
+            id = int.from_bytes(dados.recv(6), 'big')
+            tupla = banco.deletar(id)
+
+            if not tupla:
+                status = 1
+            else:
+                status = 0
+                
             mensagem = status.to_bytes(2, 'big', signed=True)
             dados.send(mensagem)
 
