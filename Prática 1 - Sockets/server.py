@@ -12,8 +12,8 @@ sock.bind(endereco) #vincula socket responder nessa porta
 
 sock.listen(10) #n = num de vagas / fila de espera p conexao
 
-[dados, _] = sock.accept() #espera que alguem venha pedir conexao na porta definida -> abre dados tbem
-#accept eh bloqueante
+[dados, _] = sock.accept() #espera que alguem venha pedir conexao na porta definida -> abre dados tbem - accept eh bloqueante
+print("The client has connected to the server")
 
 while True:
     opcode = dados.recv(1) #ler 1 byte
@@ -31,7 +31,12 @@ while True:
             preco = struct.unpack('>d', dados.recv(8))[0]
 
             conf = banco.inserir(codbar, nome, estoque, loc, preco)
-            status = 0 if conf else -1
+            if conf == -1:
+                status = -2
+            elif conf is not None:
+                status = 0
+            else:
+                status = -1
 
             mensagem = status.to_bytes(2, 'big', signed=True)
             dados.send(mensagem)
@@ -46,6 +51,8 @@ while True:
                 dados.send(status.to_bytes(2, 'big', signed=True))
                 continue
             else:
+                status = 0
+                dados.send(status.to_bytes(2, 'big', signed=True))
                 codbar = tupla [0] #maybe remover dps --> ja usa codbar p/ consultar
                 nome = tupla[1]
                 estoque = tupla[2]
@@ -98,6 +105,11 @@ while True:
                 
             mensagem = status.to_bytes(2, 'big', signed=True)
             dados.send(mensagem)
+
+        case 'E':
+            print("Client closed the connection")
+            dados.close()
+            break
 
 
 

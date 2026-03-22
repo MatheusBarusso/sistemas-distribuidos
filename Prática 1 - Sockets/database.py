@@ -11,17 +11,23 @@ class DB:
 
 
     def inserir(self, codbar, nome, estoque, loc, preco):
-        cursor = self.conexao.cursor()
-        cursor.execute("INSERT INTO mercado(codbar, nome, estoque, loc, preco) VALUES (?, ?, ?, ?, ?)", (codbar, nome, estoque, loc, preco))
+        try:
+            cursor = self.conexao.cursor()
+            cursor.execute("INSERT INTO mercado(codbar, nome, estoque, loc, preco) VALUES (?, ?, ?, ?, ?)", (codbar, nome, estoque, loc, preco))
 
-        if (cursor.rowcount > 0):
-            id = cursor.lastrowid
-        else:
-            id = None
+            if (cursor.rowcount > 0):
+                id = cursor.lastrowid
+            else:
+                id = None
 
-        self.conexao.commit()
-        cursor.close()
-        return id
+            self.conexao.commit()
+            cursor.close()
+            return id
+        except sqlite3.IntegrityError:
+            return -1
+        except Exception as err:
+            print(f"Erro inesperado: {err}")
+            return None
     
 
     def buscar(self, id):

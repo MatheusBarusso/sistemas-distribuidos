@@ -5,7 +5,13 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #INET -> Rede Interna
 #manda dados p/ server
 
 endereco = ('127.0.0.1', 55555) #Localhost - Porta 50K+
-sock.connect(endereco)
+
+try:
+    sock.connect(endereco)
+    print("Connected to the server\n\n")
+except Exception as err:
+    print("The client wasn't able to connect to the server")
+
 
 while True:
     print('┌──────────────────────────────────────────────────────────────────┐')
@@ -33,7 +39,9 @@ while True:
             sock.send(mensagem)
             status_b = sock.recv(2) #numero de bytes a serem lidos
             status = int.from_bytes(status_b, 'big', signed=True)
-            if (status == -1):
+            if (status == -2):
+                print('Error: Barcode already registered in the system.\n\n')
+            elif (status == -1):
                 print('Error in registering\n\n')
             else:
                 print('Registered using Barcode as id\n\n')
@@ -107,14 +115,17 @@ while True:
                 status_b = sock.recv(2)
                 status = int.from_bytes(status_b, 'big', signed=True)
                 if (status == 1):
-                    print('|\n| Product deleted!')
+                    print('|\n| Product deleted!\n\n')
                     break
                 if (status == 0):
-                    print('|\n| Product not found, try again.')
+                    print('|\n| Product not found, try again.\n\n')
                     break
         
 
         case 'E':
+            print('Closing the connection')
+            sock.send('E'.encode())
+            sock.close()
             break
 
 
