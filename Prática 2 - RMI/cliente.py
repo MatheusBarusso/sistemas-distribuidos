@@ -17,11 +17,11 @@ def limpar_tela():
 while True:
     print('┌──────────────────────────────────────────────────────────────────┐')
     opcao = input('| Choose an option (C)reate, (R)ead, (U)pdate, (D)elete or (E)xit  |\n| ')
-    print('└──────────────────────────────────────────────────────────────────┘\n')  
+    print('└──────────────────────────────────────────────────────────────────┘')  
 
     match opcao:
         case 'C':
-            print('\n\n┌──────────────────────────────────────────────────────┐')
+            print('┌──────────────────────────────────────────────────────┐')
             print('| Insert the following informations about the product: |')
             nome = input('| Name: ')
             estoque = int(input('| Quantity in Stock: '))
@@ -32,21 +32,24 @@ while True:
             produto_criado = produto.Produto(codbar, nome, estoque, loc, preco)
             resposta = server.inserir(produto_criado)
 
-            if (resposta != 0):
-                 print('| Product created!')
-            else:
+
+            if (resposta == -1):
+                 print('| Invalid Codebar! Product already registered!')
+            elif (resposta == None):
                  print('| Something went wrong')
+            else:
+                 print('| Product created!')
             
             print('└──────────────────────────────────────────────────────┘\n\n')
             print('┌───────────────────────────────────┐')
-            print("| Pressione Enter para continuar...")
+            print("| Press enter to continue...")
             input('└───────────────────────────────────┘')
             limpar_tela()
 
 
 
         case 'R':  
-                print('\n\n┌──────────────────────────────────────────────────────┐')
+                print('┌──────────────────────────────────────────────────────┐')
                 id = int(input('| Insert the Codebar: '))
                 resposta = server.buscar(id)
 
@@ -58,13 +61,13 @@ while True:
                     print('└──────────────────────────────────────────────────────┘\n\n')
                 
                 print('┌───────────────────────────────────┐')
-                print("| Pressione Enter para continuar...")
+                print("| Press enter to continue...")
                 input('└───────────────────────────────────┘')
                 limpar_tela()
 
 
         case 'U':
-                print('\n\n┌──────────────────────────────────────────────────────┐')
+                print('┌──────────────────────────────────────────────────────┐')
                 id = int(input('| Insert the Codebar: '))
                 resposta = server.buscar(id)
 
@@ -84,7 +87,7 @@ while True:
 
                     status = server.atualizar(produto_atualizado)
 
-                    if (status == -1):
+                    if (status == False):
                         print('┌──────────────────────────────────────────────────────┐')
                         print('| Error in updating info\n\n')
                         print('└──────────────────────────────────────────────────────┘\n\n')
@@ -94,13 +97,13 @@ while True:
                         print('└──────────────────────────────────────────────────────┘\n\n')
                 
                 print('┌───────────────────────────────────┐')
-                print("| Pressione Enter para continuar...")
+                print("| Press enter to continue...")
                 input('└───────────────────────────────────┘')
                 limpar_tela()
             
         
         case 'D':
-                print('\n\n┌──────────────────────────────────────────────────────┐')
+                print('┌──────────────────────────────────────────────────────┐')
                 id = int(input('| Insert the Codebar: '))
 
                 status = server.deletar(id)
@@ -112,7 +115,7 @@ while True:
                     print('└──────────────────────────────────────────────────────┘\n\n')
 
                 print('┌───────────────────────────────────┐')
-                print("| Pressione Enter para continuar...")
+                print("| Press enter to continue...")
                 input('└───────────────────────────────────┘')
                 limpar_tela()
         
