@@ -22,7 +22,7 @@ while True:
     
     opcode = opcode.decode()
     match opcode: 
-        case 'C': #literalmente processo de envio mas ao contrario. IMPORTANTE: CONSUMIR BYTES NA ORDEM E TAMANHO CORRETO
+        case 'C': 
             tam = int.from_bytes(dados.recv(1), 'big')
             nome = dados.recv(tam).decode()
             estoque = int.from_bytes(dados.recv(4), 'big')

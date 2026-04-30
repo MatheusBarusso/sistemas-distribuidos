@@ -46,7 +46,7 @@ while True:
             else:
                 print('Registered using Barcode as id\n\n')
 
-        case 'R':   #INSERIR MSG DE ERRO CASO ITEM NÃO ENCONTRADO
+        case 'R':  
             while True:
                 print('\n\n┌──────────────────────────────────────────────────────┐')
                 id = int(input('| Insert the Codebar: '))
