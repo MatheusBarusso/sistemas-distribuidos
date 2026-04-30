@@ -2,6 +2,8 @@ import produto
 import crud
 import Pyro5.api
 from serializador import registrar_serializadores
+import Pyro5.errors
+import os
 
 registrar_serializadores()
 
@@ -9,12 +11,13 @@ ns = Pyro5.api.locate_ns()
 uri = ns.lookup("Matheus.Barusso")
 server = Pyro5.api.Proxy(uri)
 
-
+def limpar_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 while True:
     print('┌──────────────────────────────────────────────────────────────────┐')
     opcao = input('| Choose an option (C)reate, (R)ead, (U)pdate, (D)elete or (E)xit  |\n| ')
-    print('└──────────────────────────────────────────────────────────────────┘\n\n')  
+    print('└──────────────────────────────────────────────────────────────────┘\n')  
 
     match opcao:
         case 'C':
@@ -25,11 +28,21 @@ while True:
             codbar  = int(input('| Barcode: '))
             loc = int(input('| Aisle: '))
             preco = float(input('| Price: '))
-            print('└──────────────────────────────────────────────────────┘\n\n')
 
             produto_criado = produto.Produto(codbar, nome, estoque, loc, preco)
+            resposta = server.inserir(produto_criado)
 
-            server.inserir(produto_criado)
+            if (resposta != 0):
+                 print('| Product created!')
+            else:
+                 print('| Something went wrong')
+            
+            print('└──────────────────────────────────────────────────────┘\n\n')
+            print('┌───────────────────────────────────┐')
+            print("| Pressione Enter para continuar...")
+            input('└───────────────────────────────────┘')
+            limpar_tela()
+
 
 
         case 'R':  
@@ -43,6 +56,11 @@ while True:
                 else:
                     print('| \n| Product found!\n|\n| Name:', resposta.nome, '\n| Quantity in Stock:', resposta.estoque, '\n| Barcode:', resposta.codbar, '\n| Aisle:', resposta.loc, '\n| Price:', resposta.preco)
                     print('└──────────────────────────────────────────────────────┘\n\n')
+                
+                print('┌───────────────────────────────────┐')
+                print("| Pressione Enter para continuar...")
+                input('└───────────────────────────────────┘')
+                limpar_tela()
 
 
         case 'U':
@@ -74,6 +92,11 @@ while True:
                         print('┌──────────────────────────────────────────────────────┐')
                         print('| Info updated for selected Barcode!')
                         print('└──────────────────────────────────────────────────────┘\n\n')
+                
+                print('┌───────────────────────────────────┐')
+                print("| Pressione Enter para continuar...")
+                input('└───────────────────────────────────┘')
+                limpar_tela()
             
         
         case 'D':
@@ -82,15 +105,26 @@ while True:
 
                 status = server.deletar(id)
                 if (status == None):
-                    print('|\n| Product deleted!\n')
+                    print("| \n| Product not found!")
+                    print('└──────────────────────────────────────────────────────┘\n\n')
                 else:
-                    print('|\n| Product not found, try again.\n')
-                print('└──────────────────────────────────────────────────────┘\n\n')
+                    print('| \n| Following product was deleted!\n|\n| Name:', status.nome, '\n| Quantity in Stock:', status.estoque, '\n| Barcode:', status.codbar, '\n| Aisle:', status.loc, '\n| Price:', status.preco)
+                    print('└──────────────────────────────────────────────────────┘\n\n')
+
+                print('┌───────────────────────────────────┐')
+                print("| Pressione Enter para continuar...")
+                input('└───────────────────────────────────┘')
+                limpar_tela()
         
 
-        case 'E':
-            print('| Closing the connection')
-            print('└──────────────────────────────────────────────────────┘\n\n')  
+        case 'E': 
+            try:
+                print('┌───────────────────────────┐')
+                print('| Closing the connection...')
+                print('└───────────────────────────┘\n\n') 
+                server.desligar()
+            except Pyro5.errors.ConnectionClosedError:
+                 pass
             break      
          
         
