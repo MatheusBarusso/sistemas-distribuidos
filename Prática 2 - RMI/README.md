@@ -33,7 +33,7 @@ O Name Server roda, por padrão, na porta `9090`.
 Em outro terminal, execute o servidor:
 
 ```bash
-python servidor.py
+python server.py
 ```
 
 
