@@ -6,6 +6,13 @@ from produto import Produto
 app = FastAPI()
 crud = MercadoCRUD()
 
+# Dicionário de respostas HTTP usados
+# 201 -> Válido
+# 409 -> PK já registrada
+# 404 -> Não encontrado
+# 200 -> OK
+# 500 -> Erro inesperado
+
 class ProdutoEntrada(BaseModel):
     codbar: int = Field(gt = 0)
     nome: str = Field(min_length = 1)
