@@ -8,17 +8,11 @@ O problema escolhido é baseado no **Método de Monte Carlo para $\pi$**. É um 
 - A área do quadrado $A_{sqr} = (2r)^2 = 4r^2$
 - A área do círculo é $A_{cir} = \pi r^2$
 - A razão entre a área do circulo e a área do quadrado é:
-$$
-\frac{A_{cir}}{A_{sqr}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}
-$$
+  $$\frac{A_{cir}}{A_{sqr}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}$$
 - Se um número muito grande de pontos aleatório $(x,y)$ for gerado dentro desse quadrado e testarmos quantos caem dentro do círculo por meio da equação da circuferência $x^2 + y^2 \leq r^2$ teremos:
-$$
-\frac{Pontos~dentro~do~círculo}{Pontos~totais} = \frac{\pi}{4}
-$$
+  $$\frac{\text{Pontos dentro do círculo}}{\text{Pontos totais}} = \frac{\pi}{4}$$
 - E portanto:
-$$
-\pi \approx 4 \times \frac{Pontos~dentro~do~círculo}{Pontos~toais}
-$$
+  $$\pi \approx 4 \times \frac{\text{Pontos dentro do círculo}}{\text{Pontos totais}}$$
 
 
 ## Requisitos
